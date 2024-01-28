@@ -1,4 +1,6 @@
 import asyncio
+import os
+from pyrogram import Client
 from datetime import datetime
 from pytz import timezone
 from pyrogram import Client, __version__
@@ -45,6 +47,21 @@ class Bot(Client):
             except:
                 print("Pʟᴇᴀꜱᴇ Mᴀᴋᴇ Tʜɪꜱ Iꜱ Aᴅᴍɪɴ Iɴ Yᴏᴜʀ Lᴏɢ Cʜᴀɴɴᴇʟ")
 
+async def doc(self, message):
+        try:
+            document = message.document
+            file_path = await self.download_media(document, "downloads/")
+
+            # Check if file_path is a directory
+            if os.path.isdir(file_path):
+                print(f"{file_path} is a directory. Skipping removal.")
+            else:
+                os.remove(file_path)
+                print(f"File {file_path} removed successfully.")
+
+        except Exception as e:
+            print(f"Error in handling document: {e}")
+
 async def main():
     bot = Bot()
     await bot.start()
@@ -54,3 +71,4 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.create_task(main())
     loop.run_forever()
+file_path = "downloads/example_document.pdf"
